@@ -6,7 +6,8 @@ const VehicleOwner=require('../models/VehicleOwner')
 const { body, validationResult } = require("express-validator");
 const expressAsyncHandler =require('express-async-handler');
 const LiveCredit = require('../models/LiveCredit');
-const {v4 : uuidv4} = require('uuid')
+const generateUniqueId = require('generate-unique-id');
+
 
 
 
@@ -18,7 +19,6 @@ const {v4 : uuidv4} = require('uuid')
 router.post('/addreq',expressAsyncHandler (async(req,res)=>{
     console.log("body",req.body)
 
-    const {vehicle_no,particulars,reference,debit,credit,amount_due,status}=req.body;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -28,16 +28,26 @@ router.post('/addreq',expressAsyncHandler (async(req,res)=>{
     try {
     //   / const userCredit=await LiveCredit.find();
 
-        // console.log("userCredit",userCredit);
+        //console.log("userCredit",userCredit);
 
 
+        const id = generateUniqueId();
 
-        const newId = uuidv4()
-
-        const newReq=new Transaction({
-          newId,vehicle_no,particulars,reference,debit,credit,amount_due,status
-        })
-        const savedreq=await newReq.save();
+        console.log("id",id)
+        // const newReq=new Transaction({
+        //    transaction_no,vehicle_no,particulars,reference,debit,credit,amount_due,status
+        // })
+        let savedreq = await Transaction.create({
+            transaction_no:id,
+            vehicle_no:req.body.vehicle_no,
+            particulars:req.body.particulars,
+            reference:req.body.reference,
+            debit:req.body.debit,
+            credit:req.body.credit,
+            amount_due:req.body.amount_due,
+            status:'req_received'
+           
+          });
         
 
         res.json(savedreq);
@@ -93,7 +103,6 @@ router.put('/completereq/:id', async (req, res) => {
 }
 
 })
-
 
 
 
