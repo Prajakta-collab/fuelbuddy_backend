@@ -6,16 +6,17 @@ const TransactionSchema = new Schema({
   // vehicle_no:[
   //   {type: Schema.Types.ObjectId, ref: 'vehicle'}
   // ],
+  ///required fields changes to look
   vehicle_no:{type:String, required: true},
 
-  particulars: { type: String, required: true },
+  particulars: { type: String, },
   reference: { type: String},
   debit: { type: Number, required: true },
-  credit: { type: Number, required: true },
-  amount_due: { type: Number, required: true },
+  credit: { type: Number,  },
+  amount_due: { type: Number },
 
 
-  status: { type: String, required: true,enum:["req_received","pay_received","inprocess","delivered"] },
+  status: { type: String, enum:["req_received","pay_received","inprocess","delivered"] },
 
   tr_date: {
     type: Date,

@@ -6,7 +6,7 @@ const VehicleOwner=require('../models/VehicleOwner')
 const { body, validationResult } = require("express-validator");
 const expressAsyncHandler =require('express-async-handler');
 const LiveCredit = require('../models/LiveCredit');
-const uuid=require('uuid')
+const {v4 : uuidv4} = require('uuid')
 
 
 
@@ -16,9 +16,9 @@ const uuid=require('uuid')
 //Router 1:
 
 router.post('/addreq',expressAsyncHandler (async(req,res)=>{
-    console.log(req.body)
+    console.log("body",req.body)
 
-    const {transaction_no,vehicle_no,particulars,reference,debit,credit,amount_due,status}=req.body;
+    const {vehicle_no,particulars,reference,debit,credit,amount_due,status}=req.body;
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -28,14 +28,14 @@ router.post('/addreq',expressAsyncHandler (async(req,res)=>{
     try {
     //   / const userCredit=await LiveCredit.find();
 
-        console.log("userCredit",userCredit);
+        // console.log("userCredit",userCredit);
 
 
 
-        // var tc=uuid().stringyfy().slice(0,5);
-        // console.log("tc",tc)
+        const newId = uuidv4()
+
         const newReq=new Transaction({
-           transaction_no,vehicle_no,particulars,reference,debit,credit,amount_due,status
+          newId,vehicle_no,particulars,reference,debit,credit,amount_due,status
         })
         const savedreq=await newReq.save();
         
