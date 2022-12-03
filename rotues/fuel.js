@@ -70,7 +70,7 @@ router.get('/getallreq',async(req,res)=>{
     res.json(requests);
     } catch (error) {
         //console.error(error.message);
-      res.status(500).send("Internal Server Error !");
+      res.send(500,"Internal Server eror")
     }
     
 

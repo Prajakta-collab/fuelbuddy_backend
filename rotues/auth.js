@@ -27,7 +27,7 @@ router.post(
     const errors = validationResult(req);
     let success=false;
     if (!errors.isEmpty()) {
-      return res.status(400).json({success, errors: errors.array() });
+      return res.status(500).json({success, errors: errors.array() });
     }
     try {
     
@@ -38,7 +38,7 @@ router.post(
       
       if (user) {
         return res
-          .status(400)
+          .status(500)
           .json({success, error: "Sorry this user is alreay exist !" });
       }
 
@@ -99,21 +99,21 @@ router.post(
   async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
+      return res.status(500).json({ errors: errors.array() });
     }
 
     const{email,password}=req.body;
     try {
       let user=await User.findOne({email});
       if(!user){
-        let success=false
-        return res.status(400).send(success,"Please login with correct credentials");
+        let success=false;
+        return res.send(500,"Please login with correct credentials");
       }
 
       let passwordCompare=await bcrypt.compare(password,user.password);
       if(!passwordCompare){
         success=false
-        return res.status(400).send(success,"Please login with correct credentials");
+        return res.send(500,success,"Please login with correct credentials");
       }
       const data = {
         id: user.id,
@@ -126,7 +126,7 @@ router.post(
        
       success=true;
       //authToken return kru apn user la
-      res.json({success,authToken});
+      res.json({success,authToken,user});
 
     } catch (error) {
       console.error(error.message);
